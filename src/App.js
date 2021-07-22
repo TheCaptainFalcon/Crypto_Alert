@@ -20,9 +20,14 @@ import './App.css';
 //   MenuDivider,
 // } from "@chakra-ui/react";
 import Alerts from './components/Alerts';
+import Settings from './components/Settings';
+import { ChakraProvider } from '@chakra-ui/react'; 
+// This is needed for the CSS template to work/apply.
+
 
 function App() {
   return (
+    <ChakraProvider>
       <Router>
         <div>
           <ul className="menu">
@@ -67,10 +72,11 @@ function App() {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/alerts" component={Alerts} />
-            <Route exact path="/settings" component={Alerts} />
+            <Route exact path="/settings" component={Settings} />
           </Switch>
         </div>
       </Router>
+      </ChakraProvider>
       
   );
 }
