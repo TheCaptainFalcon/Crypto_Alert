@@ -1,3 +1,21 @@
-.form  {
-    margin: 2rem;
+.container  {
+    margin: 8rem;
+    border: 1px solid black;
 }
+
+.emailBox, .passBox, .phoneBox, .deleteBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.deleteBox {
+    color: red;
+}
+
+.emailBox Button, .passBox Button, .phoneBox Button, .deleteBox Button {
+    border: 1px solid black;
+}
+
