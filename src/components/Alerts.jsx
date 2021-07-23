@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PreselectAlert from './PreselectAlert';
 
 class Alerts extends Component {
     constructor(props) {
@@ -9,6 +10,8 @@ class Alerts extends Component {
         return (  
             <div>
                 this is the alerts page.
+
+                <PreselectAlert/>
             </div>
         );
     }
