@@ -1,0 +1,11 @@
+.forgotPass {
+    font-weight: 400;
+    color: blue;
+    font-style: italic;
+}
+
+.title {
+    text-align: center;
+    font-weight: bolder;
+    font-size: larger;
+}

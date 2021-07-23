@@ -26,6 +26,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import ChangeEmail from './components/ChangeEmail';
 import ChangePass from './components/ChangePass';
 import ChangePhone from './components/ChangePhone';
+import ForgotPass from './components/ForgotPass';
 
 function App() {
   return (
@@ -78,6 +79,7 @@ function App() {
             <Route exact path="/settings/email" component={ChangeEmail} />
             <Route exact path="/settings/password" component={ChangePass} />
             <Route exact path="/settings/phone" component={ChangePhone} />
+            <Route exact path="/login/recovery" component={ForgotPass} />
           </Switch>
         </div>
       </Router>

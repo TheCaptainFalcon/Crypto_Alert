@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import {
     FormControl,
     FormLabel,
-    Input
+    Input,
+    Button
 } from '@chakra-ui/react';
 
 class ChangeEmail extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            email: '',
-            confirmEmail: ''
+            email : '',
+            confirmEmail : ''
         }
         // where to enter functions to bind
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -34,7 +35,6 @@ class ChangeEmail extends Component {
     render() { 
         return (  
             <form className="container" onSubmit={this.handleSubmit}>
-                {/* maybe its better to change this into a menu setup where it leads to each individual change setup */}
                 <div className="form">
                     <FormControl id="email" isRequired>
                         <FormLabel>Change email address</FormLabel>
@@ -55,7 +55,7 @@ class ChangeEmail extends Component {
                         />
                     </FormControl>
                 </div>
-            <button>Save</button>
+                <Button>Save</Button>
             </form>
         );
     }
