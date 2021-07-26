@@ -34,7 +34,7 @@ class Login extends Component {
     render() {
         return (
             <form className="container">
-                <h1 class="title">Login</h1>
+                <h1 className="title">Login</h1>
                 <div className="form">
                     <FormControl id="email" isRequired>
                         <FormLabel>Enter your email address</FormLabel>
