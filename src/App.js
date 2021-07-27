@@ -28,7 +28,7 @@ import ChangePass from './components/ChangePass';
 import ChangePhone from './components/ChangePhone';
 import ForgotPass from './components/ForgotPass';
 
-function App() {
+function App() { 
   return (
     <ChakraProvider>
       <Router>
@@ -49,6 +49,7 @@ function App() {
             <li>
                <NavLink to="/settings">Account Settings</NavLink>
             </li>
+            
             {/* <li>
             <Menu>
                 <MenuButton as={Button} colorScheme="pink">

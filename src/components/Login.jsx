@@ -6,6 +6,7 @@ import {
     Button
 } from '@chakra-ui/react';
 import './css/Login.css';
+import firebase from 'firebase';
 
 class Login extends Component {
     constructor(props) {
@@ -15,33 +16,52 @@ class Login extends Component {
             pass : '',
             forgotPass : ''
         }
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handlePassChange = this.handlePassChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleEmailChange(e) {
+    handleChange(e) {
         this.setState({
-            email : e.target.value
+            [e.target.name] : e.target.value
         })
     };
 
-    handlePassChange(e) {
-        this.setState({
-            pass : e.target.value
-        })
+    handleSubmit(e) {
+        e.preventDefault();
+        const { email, pass } = this.state;
+        firebase.auth().signInWithEmailAndPassword(email, pass)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                // test dev
+                console.log('logged in!', user);
+            }) 
+            .catch((error) => {
+                console.log('error', error)
+            })
     };
 
     render() {
+        const {
+            email,
+            pass,
+            forgotPass
+        } = this.state;
+
+        const isInvalid = 
+            email === '' ||
+            pass === '';
+
         return (
-            <form className="container">
+            <form className="container" onSubmit={this.handleSubmit}>
                 <h1 className="title">Login</h1>
                 <div className="form">
                     <FormControl id="email" isRequired>
                         <FormLabel>Enter your email address</FormLabel>
                         <Input 
+                            name="email"
                             type="email" 
                             placeholder="Enter your email address" 
-                            onChange={this.handleEmailChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
@@ -49,16 +69,17 @@ class Login extends Component {
                     <FormControl id="pass" isRequired>
                         <FormLabel>Enter your password</FormLabel>
                         <Input 
+                            name="pass"
                             type="password" 
                             placeholder="Enter your password" 
-                            onChange={this.handlePassChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
                 <div>
                     <a className="forgotPass" href="/login/recovery">Forgot Password?</a>
                 </div>
-                <Button>Submit</Button>
+                <Button type="submit" disabled={isInvalid}>Submit</Button>
             </form>
         )
     }
