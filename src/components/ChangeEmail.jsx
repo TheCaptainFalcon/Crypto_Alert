@@ -5,6 +5,7 @@ import {
     Input,
     Button
 } from '@chakra-ui/react';
+import firebase from 'firebase';
 
 class ChangeEmail extends Component {
     constructor(props) {
@@ -14,34 +15,50 @@ class ChangeEmail extends Component {
             confirmEmail : ''
         }
         // where to enter functions to bind
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handleConfirmEmailChange = this.handleConfirmEmailChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     };
 
-    handleEmailChange(e) {
-        this.setState({ email: e.target.value })
-    };
-
-    handleConfirmEmailChange(e) {
-        this.setState({ confirmEmail: e.target.value })
+    handleChange(e) {
+        this.setState({ 
+            [e.target.name]: e.target.value 
+        })
     };
 
     handleSubmit(e) {
         e.preventDefault();
-        alert(`${this.state.email} + has been changed!`)
-    }
+        const { email } = this.state;
+        const user = firebase.auth().currentUser;
+        user.updateEmail(email)
+            .then(() => {
+                console.log(`${email} + has been changed!`)
+            })
+            .catch((err) => {
+                console.log('error has occurred', err)
+            })
+    };
 
     render() { 
+        const {
+            email,
+            confirmEmail
+        } = this.state;
+
+        const isInvalid = 
+        email === '' ||
+        email !== confirmEmail ||
+        confirmEmail === ''
+
         return (  
             <form className="container" onSubmit={this.handleSubmit}>
                 <div className="form">
                     <FormControl id="email" isRequired>
                         <FormLabel>Change email address</FormLabel>
                         <Input 
+                            name="email"
                             type="email" 
                             placeholder="Enter your email address" 
-                            onChange={this.handleEmailChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
@@ -49,13 +66,14 @@ class ChangeEmail extends Component {
                     <FormControl id="confirmEmail" isRequired>
                         <FormLabel>Confirm change to email address</FormLabel>
                         <Input 
+                            name="confirmEmail"
                             type="email" 
                             placeholder="Reenter your email address" 
-                            onChange={this.handleConfirmEmailChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
-                <Button>Save</Button>
+                <Button type="submit" disabled={isInvalid}>Save</Button>
             </form>
         );
     }
