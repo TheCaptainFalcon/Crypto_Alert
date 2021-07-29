@@ -7,7 +7,7 @@ import {
     Button
 } from '@chakra-ui/react';
 import './css/Signup.css';
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 class Signup extends Component {
     constructor(props) {
@@ -35,9 +35,10 @@ class Signup extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const { email, pass } = this.state;
+        const user = firebase.auth().currentUser
+
         firebase.auth().createUserWithEmailAndPassword(email, pass)
-            .then((userCredential) => {
-                const user = userCredential.user;
+            .then(() => {
                 // test dev
                 console.log('success', user);
             })

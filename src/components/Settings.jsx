@@ -24,24 +24,24 @@ class Settings extends Component {
 
 
     emailPressed() {
-        alert('email has been pressed')
+        console.log('email has been pressed')
         this.props.history.push('/settings/email');
         // test 
         console.log(this.props)
     }
 
     passPressed() {
-        alert('password has been pressed')
+        console.log('password has been pressed')
         this.props.history.push('/settings/password')
     }
 
     phonePressed() {
-        alert('phone has been pressed')
+        console.log('phone has been pressed')
         this.props.history.push('/settings/phone')
     }
 
     deletePressed() {
-        alert('delete has been pressed')
+        console.log('delete has been pressed')
         // filler until modal confirmed
     }
     
@@ -56,7 +56,7 @@ class Settings extends Component {
                     <Button className='button' onClick={this.passPressed}>Change Password</Button>
                 </div>
                 <div className="phoneBox">
-                    <Button className='button' onClick={this.phonePressed}>Change Phone number</Button>
+                    <Button className='button' onClick={this.phonePressed}>Update Phone number</Button>
                 </div>
                 <div className="deleteBox">
                     <Button onClick={this.deletePressed}>Delete Account</Button>
