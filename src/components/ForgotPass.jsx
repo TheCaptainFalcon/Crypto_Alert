@@ -6,6 +6,7 @@ import {
     Button
 
 } from '@chakra-ui/react';
+import firebase from 'firebase';
 
 class ForgotPass extends Component {
     constructor(props) {
@@ -13,30 +14,51 @@ class ForgotPass extends Component {
         this.state = {  
             email : ''
         }
-        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleEmailChange(e) {
+    handleChange(e) {
         this.setState({
-            email : e.target.value
+            [e.target.name] : e.target.value
         })
     };
 
+    handleSubmit(e) {
+        const {email} = this.state
+        e.preventDefault();
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                console.log('email sent!', email)
+            })
+            .catch((error) => {
+                console.log('error', error)
+            });
+    }
+    
     render() { 
+        const {
+            email
+        } = this.state;
+
+        const isInvalid = 
+            email === '';
+
         return (  
-            <form className="container">
-                <h1 class="title">Password Recovery</h1>
+            <form className="container" onSubmit={this.handleSubmit}>
+                <h1 className="title">Password Recovery</h1>
                 <div className="form">
                     <FormControl id="email" isRequired>
                         <FormLabel>Enter your email address</FormLabel>
                         <Input 
+                            name="email"
                             type="email" 
                             placeholder="Enter your email address" 
-                            onChange={this.handleEmailChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
-                <Button>Submit</Button>
+                <Button type="submit" disabled={isInvalid}>Submit</Button>
                 {/* modal with status update of new email being sent and automatic redirect function */}
             </form>
         );

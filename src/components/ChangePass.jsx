@@ -5,54 +5,61 @@ import {
     Input,
     Button
 } from '@chakra-ui/react';
+import firebase from 'firebase';
 
 class ChangePass extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            currentPass : '',
             newPass : '',
             confirmPass : ''
         }
 
-        this.handleCurrentPassChange = this.handleCurrentPassChange.bind(this);
-        this.handleNewPassChange = this.handleNewPassChange.bind(this);
-        this.handleConfirmPassChange = this.handleConfirmPassChange.bind(this);
-
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleCurrentPassChange(e) {
-        this.setState({ currentPass : e.target.value })
+    handleChange(e) {
+        this.setState({ 
+            [e.target.name] : e.target.value 
+        })
     };
 
-    handleNewPassChange(e) {
-        this.setState({ newPass : e.target.value })
-    };
+    handleSubmit(e) {
+        e.preventDefault();
+        const { newPass } = this.state;
+        const user = firebase.auth().currentUser;
 
-    handleConfirmPassChange(e) {
-        this.setState({ confirmPass : e.target.value })
-    }
+        user.updatePassword(newPass) 
+            .then(() => {
+                console.log('password update success!')
+            })
+            .catch((err) => {
+                console.log('error has occurred', err)
+            })
+    };
  
     render() { 
+        const {
+            newPass,
+            confirmPass
+        } = this.state;
+
+        const isInvalid =
+            newPass === '' ||
+            confirmPass === '' ||
+            newPass !== confirmPass; 
+
         return (  
-            <form className="container">
-                <div className="form">
-                    <FormControl id="currentPass" isRequired>
-                        <FormLabel>Enter your current password</FormLabel>
-                        <Input 
-                            type="password" 
-                            placeholder="Enter your current password" 
-                            onChange={this.handleCurrentPassChange}
-                        />
-                    </FormControl>
-                </div>
+            <form className="container" onSubmit={this.handleSubmit}>
                 <div className="form">
                     <FormControl id="newPass" isRequired>
                         <FormLabel>Enter a new password</FormLabel>
                         <Input 
+                            name="newPass"
                             type="password" 
                             placeholder="Enter a new password" 
-                            onChange={this.handleNewPassChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
@@ -60,13 +67,14 @@ class ChangePass extends Component {
                     <FormControl id="confirmPass" isRequired>
                         <FormLabel>Confirm your new password</FormLabel>
                         <Input 
+                            name="confirmPass"
                             type="password" 
                             placeholder="Confirm your new password" 
-                            onChange={this.handleConfirmPassChange}
+                            onChange={this.handleChange}
                         />
                     </FormControl>
                 </div>
-                <Button>Save</Button>
+                <Button type="submit" disabled={isInvalid}>Save</Button>
             </form>
         );
     }
