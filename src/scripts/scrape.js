@@ -12,43 +12,45 @@ const puppeteer = require('puppeteer');
     // firebase realtime database
     const firebaseUrl = "https://crypto-alert-12f21-default-rtdb.firebaseio.com/";
 
-    // only works with fast internet speed - change to navigation or selector later
-    await page.waitForTimeout(3000)
-    .then(await page.click(".bnc-btn-text"))
+    await page.waitForSelector(".bnc-btn-text")
+        .then(await page.click(".bnc-btn-text"));
+    
+    // by default data is sorted by 24 hr vol - this switches it based on name to remain constant
+    await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__headerTruncatedText")[1].click());
 
     // btc/usd
-    const btc_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[10].textContent);
-    const btc_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[11].textContent);
-    const btc_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[12].textContent);
-    const btc_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[13].textContent);
-    const btc_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[16].textContent);
-    const btc_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[17].textContent);
+    const btc_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[91].textContent);
+    const btc_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[92].textContent);
+    const btc_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[93].textContent);
+    const btc_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[94].textContent);
+    const btc_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[97].textContent);
+    const btc_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[98].textContent);
 
     // eth/usd
-    const eth_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[1].textContent);
-    const eth_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[2].textContent);
-    const eth_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[3].textContent);
-    const eth_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[4].textContent);
-    const eth_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[7].textContent);
-    const eth_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[8].textContent);
+    const eth_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[181].textContent);
+    const eth_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[182].textContent);
+    const eth_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[183].textContent);
+    const eth_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[184].textContent);
+    const eth_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[187].textContent);
+    const eth_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[188].textContent);
 
     // ada/usd
-    const ada_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[64].textContent);
-    const ada_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[65].textContent);
-    const ada_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[66].textContent);
-    const ada_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[67].textContent);
-    const ada_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[70].textContent);
-    const ada_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[71].textContent);
+    const ada_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[10].textContent);
+    const ada_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[11].textContent);
+    const ada_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[12].textContent);
+    const ada_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[13].textContent);
+    const ada_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[16].textContent);
+    const ada_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[17].textContent);
 
-    // doge/usd
-    const doge_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[73].textContent);
-    const doge_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[74].textContent);
-    const doge_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[75].textContent);
-    const doge_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[76].textContent);
-    const doge_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[79].textContent);
-    const doge_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[80].textContent);
+    // // doge/usd
+    const doge_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[136].textContent);
+    const doge_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[137].textContent);
+    const doge_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[138].textContent);
+    const doge_percent = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[149].textContent);
+    const doge_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[142].textContent);
+    const doge_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[143].textContent);
 
-    // bnb/usdt
+    // // bnb/usdt
     const bnb_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[82].textContent);
     const bnb_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[83].textContent);
     const bnb_price = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[84].textContent);
@@ -175,8 +177,41 @@ const puppeteer = require('puppeteer');
             console.log('error has occurred', err)
         })
         
-// next exchange--
-//    await page.goto("")
-    // await browser.close();
+// // next exchange--coinbase
+//     // js generated data to load up
+//     // looks like needs at least 3 seconds to generate
+    await page.goto("https://www.coinbase.com/price");
+    await page.waitForSelector(".AssetTableRowDense__Column-sc-14h1499-2 .AssetTableRowDense__NameColumn-sc-14h1499-3 .kUHLbb");
+
+    // btc/usd
+    const coinbase_btc_name = "Bitcoin"
+    const coinbase_btc_pair = "BTC/USD"
+    const coinbase_btc_price = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[17].textContent);
+    const coinbase_btc_percent = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[19].textContent);
+    const coinbase_btc_vol = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[20].textContent);
+    const coinbase_btc_mcap = await page.evaluate(() =>  document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[21].textContent);
+    
+
+    // TextElement__Spacer-hxkcw5-0 cicsNy Header__StyledHeader-sc-1xiyexz-0 fIzulq AssetTableRowDense__StyledHeader-sc-14h1499-14 AssetTableRowDense__TabularNumeric-sc-14h1499-18 bxoSRw
+    
+    // coinbase btc data
+    const coinbase_btc_data = {
+        Name : coinbase_btc_name,
+        Pair : coinbase_btc_pair,
+        Price : coinbase_btc_price,
+        Daily_Change_Percent : coinbase_btc_percent,
+        Market_Cap : coinbase_btc_mcap,
+        Daily_Volume : coinbase_btc_vol
+    }
+ 
+    axios.put(firebaseUrl + "Coinbase/BTC.json", coinbase_btc_data)
+     .then((res) => {
+         console.log("Coinbase - BTC Updated", res)
+     })
+     .catch((err) => {
+         console.log("error has occurred", err)
+     })
+   
+//    // await browser.close();
 
 })();
