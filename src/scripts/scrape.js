@@ -18,6 +18,8 @@ const puppeteer = require('puppeteer');
     // by default data is sorted by 24 hr vol - this switches it based on name to remain constant
     await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__headerTruncatedText")[1].click());
 
+    // BINANCE-US SCRAPING ***********
+
     // btc/usd
     const btc_pair = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[91].textContent);
     const btc_name = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[92].textContent);
@@ -58,25 +60,6 @@ const puppeteer = require('puppeteer');
     const bnb_mcap = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[88].textContent);
     const bnb_vol = await page.evaluate(() => document.querySelectorAll(".ReactVirtualized__Table__rowColumn")[89].textContent);
 
-
-    // targets CSS selectors (class)
-    // Binance.com - BTC/USDT
-
-    // const coin_pair = await page.evaluate(() => document.querySelector(".css-mzoqhr").textContent);
-    // const coin_price = await page.evaluate(() => document.querySelector(".showPrice").textContent);
-    // const percent_change = await page.evaluate(() => document.querySelector(".tickerPriceText").textContent);
-    
-    // const btc_pair = await page.evaluate(() => document.querySelector("div.sc-62mpio-0.dswIdD").textContent);
-    // const btc_price = await page.evaluate(() => document.querySelectorAll(".sc-1p4en3j-3")[0].textContent);
-    // const btc_amount = await page.evaluate(() => document.querySelectorAll(".sc-1p4en3j-3")[2].textContent);
-    // const btc_percent = await page.evaluate(() => document.querySelectorAll(".sc-1p4en3j-3")[3].textContent);
-
-   
-    // because dynamically altered class names - best to target just the first and index specific
-    // sc-1p4en3j-3 sc-1p4en3j-5 klZHmQ 
-    // sc-1p4en3j-3 sc-1p4en3j-4 fgGHac
-    // sc-1p4en3j-3 sc-1p4en3j-6 ioZlmt
-
     // volume is based on USD overall not by pairs
 
     const btc = {
@@ -86,9 +69,6 @@ const puppeteer = require('puppeteer');
         Daily_Change_Percent : btc_percent,
         Market_Cap : btc_mcap,
         Daily_Volume : btc_vol,
-        // Daily_Change_Amount :  btc_amount,
-        // // removes all whitespace
-        // Daily_Change_Percent : btc_percent
     }
 
     const eth = {
@@ -126,16 +106,6 @@ const puppeteer = require('puppeteer');
         Market_Cap : bnb_mcap,
         Daily_Volume : bnb_vol
     }
-
-    // change to user.uid? to match users' associated alerts
-    // axios.get(firebaseUrl + "test.json")
-    //     .then((res) => {
-    //         console.log("returning data", res)
-    //         // callback to POST function? - then define underneath as separate function?
-    //     })
-    //     .catch ((err) => {
-    //         console.log("error has occured", err)
-    //     })
 
     axios.put(firebaseUrl + "BinanceUS/BTC.json", btc)
         .then((res) => {
@@ -177,23 +147,36 @@ const puppeteer = require('puppeteer');
             console.log('error has occurred', err)
         })
         
-// // next exchange--coinbase
-//     // js generated data to load up
-//     // looks like needs at least 3 seconds to generate
+    // COINBASE SCRAPING *********
+
     await page.goto("https://www.coinbase.com/price");
-    await page.waitForSelector(".AssetTableRowDense__Column-sc-14h1499-2 .AssetTableRowDense__NameColumn-sc-14h1499-3 .kUHLbb");
+    await page.waitForSelector(".FilterItem__WrapDense-sc-193z897-1")
+        // safety guard
+        .then(await page.waitForTimeout(1000))
+    // sorts by tradeable (must be in this order: tradeable > name)
+    await page.evaluate(() => document.querySelectorAll(".FilterItem__StyledLink-sc-193z897-2")[1].click())
+    // sorts by name
+    await page.waitForSelector(".AssetTableHelpers__Th-sc-1o9oxiy-4")
+        .then(await page.click(".AssetTableHelpers__Th-sc-1o9oxiy-4"))
+    // safety guard for scrape
+    await page.waitForTimeout(1000);
 
-    // btc/usd
-    const coinbase_btc_name = "Bitcoin"
+    // btc/usd - page 1
+    const coinbase_btc_name = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[126].textContent)
     const coinbase_btc_pair = "BTC/USD"
-    const coinbase_btc_price = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[17].textContent);
-    const coinbase_btc_percent = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[19].textContent);
-    const coinbase_btc_vol = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[20].textContent);
-    const coinbase_btc_mcap = await page.evaluate(() =>  document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[21].textContent);
+    const coinbase_btc_price = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[128].textContent);
+    const coinbase_btc_percent = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[130].textContent);
+    const coinbase_btc_vol = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[131].textContent);
+    const coinbase_btc_mcap = await page.evaluate(() =>  document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[132].textContent);
     
-
-    // TextElement__Spacer-hxkcw5-0 cicsNy Header__StyledHeader-sc-1xiyexz-0 fIzulq AssetTableRowDense__StyledHeader-sc-14h1499-14 AssetTableRowDense__TabularNumeric-sc-14h1499-18 bxoSRw
-    
+    // ada/usd - page 1
+    const coinbase_ada_name = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[142].textContent);
+    const coinbase_ada_pair = "ADA/USD"
+    const coinbase_ada_price = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[144].textContent);
+    const coinbase_ada_percent = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[146].textContent);
+    const coinbase_ada_vol = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[147].textContent);
+    const coinbase_ada_mcap = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[148].textContent);
+   
     // coinbase btc data
     const coinbase_btc_data = {
         Name : coinbase_btc_name,
@@ -203,15 +186,34 @@ const puppeteer = require('puppeteer');
         Market_Cap : coinbase_btc_mcap,
         Daily_Volume : coinbase_btc_vol
     }
- 
-    axios.put(firebaseUrl + "Coinbase/BTC.json", coinbase_btc_data)
-     .then((res) => {
-         console.log("Coinbase - BTC Updated", res)
-     })
-     .catch((err) => {
-         console.log("error has occurred", err)
-     })
-   
-//    // await browser.close();
+
+    // coinbase ada data
+    const coinbase_ada_data = {
+        Name : coinbase_ada_name,
+        Pair : coinbase_ada_pair,
+        Price : coinbase_ada_price,
+        Daily_Change_Percent : coinbase_ada_percent,
+        Market_Cap : coinbase_ada_mcap,
+        Daily_Volume : coinbase_ada_vol
+    }
+
+    await axios.put(firebaseUrl + "Coinbase/BTC.json", coinbase_btc_data)
+        .then((res) => {
+            console.log("Coinbase - BTC Updated", coinbase_btc_data)
+        })
+        .catch((err) => {
+            console.log("error has occurred", err)
+        })
+
+    
+    await axios.put(firebaseUrl + "Coinbase/ADA.json", coinbase_ada_data) 
+            .then((res) => {
+                console.log("Coinbase - ADA Updated", coinbase_ada_data)
+            })
+            .catch((err) => {
+                console.log("error has occured", err)
+            })
+
+    await browser.close();
 
 })();
