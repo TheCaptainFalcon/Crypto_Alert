@@ -109,7 +109,7 @@ const puppeteer = require('puppeteer');
 
     axios.put(firebaseUrl + "BinanceUS/BTC.json", btc)
         .then((res) => {
-            console.log('BinanceUS - BTC Updated', res)
+            console.log('BinanceUS - BTC Updated', btc)
         })
         .catch((err) => {
             console.log('error has occurred', err)
@@ -117,7 +117,7 @@ const puppeteer = require('puppeteer');
 
     axios.put(firebaseUrl + "BinanceUS/ETH.json", eth)
         .then((res) => {
-            console.log('BinanceUS - ETH Updated', res)
+            console.log('BinanceUS - ETH Updated', eth)
         })
         .catch((err) => {
             console.log('error has occurred', err)
@@ -125,7 +125,7 @@ const puppeteer = require('puppeteer');
 
     axios.put(firebaseUrl + "BinanceUS/ADA.json", ada)
         .then((res) => {
-            console.log('BinanceUS - ADA Updated', res)
+            console.log('BinanceUS - ADA Updated', ada)
         })
         .catch((err) => {
             console.log('error has occurred', err)
@@ -133,7 +133,7 @@ const puppeteer = require('puppeteer');
 
     axios.put(firebaseUrl + "BinanceUS/DOGE.json", doge)
         .then((res) => {
-            console.log('BinanceUS - DOGE Updated', res)
+            console.log('BinanceUS - DOGE Updated', doge)
         })
         .catch((err) => {
             console.log('error has occurred', err)
@@ -141,7 +141,7 @@ const puppeteer = require('puppeteer');
 
     axios.put(firebaseUrl + "BinanceUS/BNB.json", bnb)
         .then((res) => {
-            console.log('BinanceUS - BNB Updated', res)
+            console.log('BinanceUS - BNB Updated', bnb)
         })
         .catch((err) => {
             console.log('error has occurred', err)
@@ -152,14 +152,14 @@ const puppeteer = require('puppeteer');
     await page.goto("https://www.coinbase.com/price");
     await page.waitForSelector(".FilterItem__WrapDense-sc-193z897-1")
         // safety guard
-        .then(await page.waitForTimeout(1000))
+        .then(await page.waitForTimeout(2000))
     // sorts by tradeable (must be in this order: tradeable > name)
     await page.evaluate(() => document.querySelectorAll(".FilterItem__StyledLink-sc-193z897-2")[1].click())
     // sorts by name
     await page.waitForSelector(".AssetTableHelpers__Th-sc-1o9oxiy-4")
         .then(await page.click(".AssetTableHelpers__Th-sc-1o9oxiy-4"))
     // safety guard for scrape
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(2000);
 
     // btc/usd - page 1
     const coinbase_btc_name = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[126].textContent)
@@ -213,6 +213,34 @@ const puppeteer = require('puppeteer');
             .catch((err) => {
                 console.log("error has occured", err)
             })
+
+    // CRYPTO.COM SCRAPING ***************************************
+
+    await page.goto("https://crypto.com/price");
+
+    // btc/usd - dynamic 2nd class name
+    const cdc_btc_name = await page.evaluate(() => document.querySelectorAll(".chakra-text")[69].textContent);
+    const cdc_btc_price = await page.evaluate(() => document.querySelectorAll(".chakra-text")[71].textContent);
+    const cdc_btc_percent = await page.evaluate(() => document.querySelectorAll(".chakra-text")[72].textContent);
+    const cdc_btc_mcap = await page.evaluate(() => document.querySelectorAll(".css-hfzjg5")[1].textContent);
+    const cdc_btc_vol = await page.evaluate(() => document.querySelectorAll(".css-hfzjg5")[0].textContent);
+    
+    const cdc_btc = {
+        Name : cdc_btc_name,
+        Pair : "BTC/USDT",
+        Price : cdc_btc_price,
+        Daily_Change_Percent : cdc_btc_percent,
+        Market_Cap : cdc_btc_mcap,
+        Daily_Volume : cdc_btc_vol,
+    }
+
+    axios.put(firebaseUrl + "Crypto/BTC.json", cdc_btc)
+    .then((res) => {
+        console.log('Crypto.com - BTC Updated', cdc_btc)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
 
     await browser.close();
 
