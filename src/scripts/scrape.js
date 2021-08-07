@@ -218,16 +218,18 @@ const puppeteer = require('puppeteer');
 
     await page.goto("https://crypto.com/price");
 
+    // FAST METHOD - ONLY APPLIES TO BTC (for some reason...)
+
     // btc/usd - dynamic 2nd class name
     const cdc_btc_name = await page.evaluate(() => document.querySelectorAll(".chakra-text")[69].textContent);
     const cdc_btc_price = await page.evaluate(() => document.querySelectorAll(".chakra-text")[71].textContent);
     const cdc_btc_percent = await page.evaluate(() => document.querySelectorAll(".chakra-text")[72].textContent);
     const cdc_btc_mcap = await page.evaluate(() => document.querySelectorAll(".css-hfzjg5")[1].textContent);
     const cdc_btc_vol = await page.evaluate(() => document.querySelectorAll(".css-hfzjg5")[0].textContent);
-    
+
     const cdc_btc = {
         Name : cdc_btc_name,
-        Pair : "BTC/USDT",
+        Pair : "BTC/USD",
         Price : cdc_btc_price,
         Daily_Change_Percent : cdc_btc_percent,
         Market_Cap : cdc_btc_mcap,
@@ -241,6 +243,119 @@ const puppeteer = require('puppeteer');
     .catch((err) => {
         console.log('error has occurred', err)
     })
+
+    // SLOWER METHOD - VERY ACCURATE (LESS FUTURE MAINTENANCE)
+    await page.goto("https://crypto.com/price/ethereum")
+
+    // eth/usd
+    const cdc_eth_name = await page.evaluate(() => document.querySelectorAll(".chakra-heading")[0].textContent);
+    const cdc_eth_price = await page.evaluate(() => document.querySelectorAll(".chakra-text")[112].textContent);
+    const cdc_eth_percent = await page.evaluate(() => document.querySelectorAll(".chakra-text")[0].textContent);
+    const cdc_eth_mcap = await page.evaluate(() => document.querySelectorAll(".chakra-text")[14].textContent);
+    const cdc_eth_vol = await page.evaluate(() => document.querySelectorAll(".chakra-text")[15].textContent);
+
+    const cdc_eth = {
+        Name : cdc_eth_name,
+        Pair : "ETH/USD",
+        Price : cdc_eth_price,
+        Daily_Change_Percent : cdc_eth_percent,
+        Market_Cap : cdc_eth_mcap,
+        Daily_Volume : cdc_eth_vol
+    }
+
+    axios.put(firebaseUrl + "Crypto/ETH.json", cdc_eth)
+    .then((res) => {
+        console.log('Crypto.com - ETH Updated', cdc_eth)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    await page.goto("https://crypto.com/price/cardano")
+    // safety guard
+    await page.waitForTimeout(1000);
+
+    // ada/usd
+    const cdc_ada_name = await page.evaluate(() => document.querySelectorAll(".chakra-heading")[0].textContent);
+    const cdc_ada_price = await page.evaluate(() => document.querySelectorAll(".chakra-text")[106].textContent);
+    const cdc_ada_percent = await page.evaluate(() => document.querySelectorAll(".chakra-text")[0].textContent);
+    const cdc_ada_mcap = await page.evaluate(() => document.querySelectorAll(".chakra-text")[14].textContent);
+    const cdc_ada_vol = await page.evaluate(() => document.querySelectorAll(".chakra-text")[15].textContent);
+
+
+    const cdc_ada = {
+        Name : cdc_ada_name,
+        Pair : "ADA/USD",
+        Price : cdc_ada_price,
+        Daily_Change_Percent : cdc_ada_percent,
+        Market_Cap : cdc_ada_mcap,
+        Daily_Volume : cdc_ada_vol
+    }
+
+    axios.put(firebaseUrl + "Crypto/ADA.json", cdc_ada)
+    .then((res) => {
+        console.log('Crypto.com - ADA Updated', cdc_ada)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    await page.goto("https://crypto.com/price/dogecoin");
+    // safety guard
+    await page.waitForTimeout(1000);
+
+    
+    // doge/usd
+    const cdc_doge_name = await page.evaluate(() => document.querySelectorAll(".chakra-heading")[0].textContent);
+    const cdc_doge_price = await page.evaluate(() => document.querySelectorAll(".chakra-text")[108].textContent);
+    const cdc_doge_percent = await page.evaluate(() => document.querySelectorAll(".chakra-text")[0].textContent);
+    const cdc_doge_mcap = await page.evaluate(() => document.querySelectorAll(".chakra-text")[14].textContent);
+    const cdc_doge_vol = await page.evaluate(() => document.querySelectorAll(".chakra-text")[15].textContent);
+
+    const cdc_doge = {
+        Name : cdc_doge_name,
+        Pair : "DOGE/USD",
+        Price : cdc_doge_price,
+        Daily_Change_Percent : cdc_doge_percent,
+        Market_Cap : cdc_doge_mcap,
+        Daily_Volume : cdc_doge_vol
+    }
+
+    axios.put(firebaseUrl + "Crypto/DOGE.json", cdc_doge)
+    .then((res) => {
+        console.log('Crypto.com - DOGE Updated', cdc_doge)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    await page.goto("https://crypto.com/price/binance-coin");
+    // safety guard
+    await page.waitForTimeout(1000);
+
+    // bnb/usd
+    const cdc_bnb_name = await page.evaluate(() => document.querySelectorAll(".chakra-heading")[0].textContent);
+    const cdc_bnb_price = await page.evaluate(() => document.querySelectorAll(".chakra-text")[106].textContent);
+    const cdc_bnb_percent = await page.evaluate(() => document.querySelectorAll(".chakra-text")[0].textContent);
+    const cdc_bnb_mcap = await page.evaluate(() => document.querySelectorAll(".chakra-text")[14].textContent);
+    const cdc_bnb_vol = await page.evaluate(() => document.querySelectorAll(".chakra-text")[15].textContent);
+    
+    const cdc_bnb = {
+        Name : cdc_bnb_name,
+        Pair : "BNB/USD",
+        Price : cdc_bnb_price,
+        Daily_Change_Percent : cdc_bnb_percent,
+        Market_Cap : cdc_bnb_mcap,
+        Daily_Volume : cdc_bnb_vol
+    }
+
+    axios.put(firebaseUrl + "Crypto/BNB.json", cdc_bnb)
+        .then((res) => {
+            console.log('Crypto.com - BNB Updated', cdc_bnb)
+        })
+        .catch((err) => {
+            console.log('error has occurred', err)
+        })
 
     await browser.close();
 
