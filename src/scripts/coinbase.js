@@ -25,6 +25,8 @@ const puppeteer = require('puppeteer');
     await page.type(".SimpleInput__HiddenInput-sc-1o8jstm-2", "bitcoin")
     await page.waitForTimeout(1500);
 
+    // could separate url to split work for coins on page 1, 2, 3, etc.
+
     // btc/usd - page 1
     const coinbase_btc_name = await page.evaluate(() => document.querySelectorAll(".TextElement__Spacer-hxkcw5-0")[14].textContent)
     const coinbase_btc_pair = "BTC/USD"
