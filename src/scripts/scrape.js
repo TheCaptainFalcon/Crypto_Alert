@@ -426,6 +426,159 @@ const puppeteer = require('puppeteer');
             console.log('error has occurred', err)
         })
 
+    // KUCOIN SCRAPING ************************
+
+    await page.goto("https://www.kucoin.com/markets");
+    await page.waitForTimeout(1500);
+    
+    // sort by usd market
+    await page.evaluate(() => document.querySelectorAll(".scTab___kby0A")[0].click());
+    // safety guard
+    await page.waitForTimeout(1500);
+    // sort by name
+    await page.evaluate(() => document.querySelectorAll(".sortLabel___2efZn")[1].click());
+    // safety guard
+    await page.waitForTimeout(1500);
+    // sort by pair (USDT)
+    await page.evaluate(() => document.querySelectorAll(".tab___39xYs")[1].click());
+    // safety guard
+    await page.waitForTimeout(1500);
+    
+    // kucoin market page does not show market cap unless going to specific coin's page
+    // scrolling dynamically re-renders results - which messes up indexing...
+
+    // ada/usdt
+    const kucoin_ada_pair =  await page.evaluate(() => document.querySelectorAll(".font-size-13")[1].textContent);
+    const kucoin_ada_price = await page.evaluate(() => document.querySelectorAll(".changingWrapper___3QOqV")[2].textContent);
+    const kucoin_ada_percent = await page.evaluate(() => document.querySelectorAll(".color-high")[1].textContent);
+    const kucoin_ada_vol = await page.evaluate(() => document.querySelectorAll(".ant-table-column-has-filters")[10].textContent);
+
+    // bnb/usdt
+    const kucoin_bnb_pair =  await page.evaluate(() => document.querySelectorAll(".font-size-13")[6].textContent);
+    const kucoin_bnb_price = await page.evaluate(() => document.querySelectorAll(".changingWrapper___3QOqV")[12].textContent);
+    const kucoin_bnb_percent = await page.evaluate(() => document.querySelectorAll(".color-high")[6].textContent);
+    const kucoin_bnb_vol = await page.evaluate(() => document.querySelectorAll(".ant-table-column-has-filters")[40].textContent);
+
+    // btc/usdt
+    const kucoin_btc_pair =  await page.evaluate(() => document.querySelectorAll(".font-size-13")[7].textContent);
+    const kucoin_btc_price = await page.evaluate(() => document.querySelectorAll(".changingWrapper___3QOqV")[14].textContent);
+    const kucoin_btc_percent = await page.evaluate(() => document.querySelectorAll(".color-high")[7].textContent);
+    const kucoin_btc_vol = await page.evaluate(() => document.querySelectorAll(".ant-table-column-has-filters")[46].textContent);
+
+    // doge/usdt
+    const kucoin_doge_pair =  await page.evaluate(() => document.querySelectorAll(".font-size-13")[13].textContent);
+    const kucoin_doge_price = await page.evaluate(() => document.querySelectorAll(".changingWrapper___3QOqV")[26].textContent);
+    const kucoin_doge_percent = await page.evaluate(() => document.querySelectorAll(".color-high")[12].textContent);
+    const kucoin_doge_vol = await page.evaluate(() => document.querySelectorAll(".ant-table-column-has-filters")[82].textContent);
+
+    // eth/usdt
+    const kucoin_eth_pair =  await page.evaluate(() => document.querySelectorAll(".font-size-13")[17].textContent);
+    const kucoin_eth_price = await page.evaluate(() => document.querySelectorAll(".changingWrapper___3QOqV")[34].textContent);
+    const kucoin_eth_percent = await page.evaluate(() => document.querySelectorAll(".color-high")[16].textContent);
+    const kucoin_eth_vol = await page.evaluate(() => document.querySelectorAll(".ant-table-column-has-filters")[106].textContent);
+
+    // kcs/usdt
+    const kucoin_kcs_pair =  await page.evaluate(() => document.querySelectorAll(".font-size-13")[22].textContent);
+    const kucoin_kcs_price = await page.evaluate(() => document.querySelectorAll(".changingWrapper___3QOqV")[45].textContent);
+    const kucoin_kcs_percent = await page.evaluate(() => document.querySelectorAll(".color-high")[20].textContent);
+    const kucoin_kcs_vol = await page.evaluate(() => document.querySelectorAll(".ant-table-column-has-filters")[136].textContent); 
+
+    const kucoin_ada = {
+        Name : "Cardano",
+        Pair : kucoin_ada_pair,
+        Price : `$` + kucoin_ada_price,
+        Daily_Change_Percent : kucoin_ada_percent,
+        Daily_Volume : `$` + kucoin_ada_vol,
+    }
+
+    const kucoin_bnb = {
+        Name : "Binance Coin",
+        Pair : kucoin_bnb_pair,
+        Price : `$` + kucoin_bnb_price,
+        Daily_Change_Percent : kucoin_bnb_percent,
+        Daily_Volume : `$` + kucoin_bnb_vol,
+    }
+
+    const kucoin_btc = {
+        Name : "Bitcoin",
+        Pair : kucoin_btc_pair,
+        Price : `$` + kucoin_btc_price,
+        Daily_Change_Percent : kucoin_btc_percent,
+        Daily_Volume : `$` + kucoin_btc_vol,
+    }
+
+    const kucoin_doge = {
+        Name : "Dogecoin",
+        Pair : kucoin_doge_pair,
+        Price : `$` + kucoin_doge_price,
+        Daily_Change_Percent : kucoin_doge_percent,
+        Daily_Volume : `$` + kucoin_doge_vol,
+    }
+
+    const kucoin_eth = {
+        Name : "Ethereum",
+        Pair : kucoin_eth_pair,
+        Price : `$` + kucoin_eth_price,
+        Daily_Change_Percent : kucoin_eth_percent,
+        Daily_Volume : `$` + kucoin_eth_vol,
+    }
+
+    const kucoin_kcs = {
+        Name : "Kucoin Token",
+        Pair : kucoin_kcs_pair,
+        Price : `$` + kucoin_kcs_price,
+        Daily_Change_Percent : kucoin_kcs_percent,
+        Daily_Volume : `$` + kucoin_kcs_vol,
+    }
+
+    axios.put(firebaseUrl + "Kucoin/ADA.json", kucoin_ada)
+    .then((res) => {
+        console.log('Kucoin - ADA Updated', kucoin_ada)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    axios.put(firebaseUrl + "Kucoin/BNB.json", kucoin_bnb)
+    .then((res) => {
+        console.log('Kucoin - BNB Updated', kucoin_bnb)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    axios.put(firebaseUrl + "Kucoin/BTC.json", kucoin_btc)
+    .then((res) => {
+        console.log('Kucoin - BTC Updated', kucoin_btc)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    axios.put(firebaseUrl + "Kucoin/DOGE.json", kucoin_doge)
+    .then((res) => {
+        console.log('Kucoin - DOGE Updated', kucoin_doge)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    axios.put(firebaseUrl + "Kucoin/ETH.json", kucoin_eth)
+    .then((res) => {
+        console.log('Kucoin - ETH Updated', kucoin_eth)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
+    axios.put(firebaseUrl + "Kucoin/KCS.json", kucoin_kcs)
+    .then((res) => {
+        console.log('Kucoin - KCS Updated', kucoin_kcs)
+    })
+    .catch((err) => {
+        console.log('error has occurred', err)
+    })
+
     await browser.close();
 
 })();
