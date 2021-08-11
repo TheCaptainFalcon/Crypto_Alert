@@ -11,16 +11,6 @@ import 'firebase/auth';
 import 'firebase/database';
 import { fbKey } from './config/firebaseKeys';
 
-
-ReactDOM.render(
-  <StrictMode>
-    <ColorModeScript />
-    <App />
-  </StrictMode>,
-  document.getElementById('root')
-);
-
-
 const firebaseConfig = {
   apiKey: fbKey.API_KEY,
   authDomain: fbKey.PROJECT_ID + '.firebaseapp.com',
@@ -32,8 +22,16 @@ const firebaseConfig = {
   measurementId: "G-" + fbKey.MEASUREMENT_ID,
 };
 
+// MUST BE PLACED BEFORE DOM RENDER - otherwise re-renders with auth state changes will result in errors
 firebase.initializeApp(firebaseConfig);
 
+ReactDOM.render(
+  <StrictMode>
+    <ColorModeScript />
+    <App />
+  </StrictMode>,
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
