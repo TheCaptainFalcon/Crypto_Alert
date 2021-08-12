@@ -28,11 +28,13 @@ import ChangePass from './components/ChangePass';
 import ChangePhone from './components/ChangePhone';
 import ForgotPass from './components/ForgotPass';
 import firebase from 'firebase';
+import MyAlerts from './components/MyAlerts';
+import Logout from './components/Logout';
 
 function App() { 
   const user = firebase.auth().currentUser;
 
-  if(!user) {
+  if(user === null) {
     return (
       <ChakraProvider>
       <Router>
@@ -61,18 +63,18 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/alerts" component={Alerts} />
             <Route exact path="/settings" component={Settings} />
-            <Route exact path="/settings/alerts" /> 
+            <Route exact path="/settings/alerts" component={MyAlerts} /> 
             <Route exact path="/settings/email" component={ChangeEmail} />
             <Route exact path="/settings/password" component={ChangePass} />
             <Route exact path="/settings/phone" component={ChangePhone} />
             <Route exact path="/login/recovery" component={ForgotPass} />
-            <Route exact path="/logout" />
+            <Route exact path="/logout" component={Logout} />
           </Switch>
         </div>
       </Router>
       </ChakraProvider>
     )
-  } if (user) {
+  } else {
     return (
       <ChakraProvider>
         <Router>
@@ -102,7 +104,7 @@ function App() {
               <Menu>
                 <MenuButton className="profileButton" as={Button} colorScheme="pink">Profile</MenuButton>
                 <MenuList>
-                    <MenuGroup title="Profile">
+                    <MenuGroup className="profileHeader" title="Profile">
                       <NavLink to="/settings/alerts">
                         <MenuItem>My Alerts</MenuItem>
                       </NavLink>
@@ -114,7 +116,7 @@ function App() {
                       </NavLink>
                     </MenuGroup>
                     <MenuDivider />
-                    <MenuGroup title="Help">
+                    <MenuGroup className="profileHeader" title="Help">
                         <MenuItem>Docs</MenuItem>
                         <MenuItem>FAQ</MenuItem>
                     </MenuGroup>
@@ -128,12 +130,12 @@ function App() {
               <Route exact path="/login" component={Login} />
               <Route exact path="/alerts" component={Alerts} />
               <Route exact path="/settings" component={Settings} />
-              <Route exact path="/settings/alerts" />
+              <Route exact path="/settings/alerts" component={MyAlerts} />
               <Route exact path="/settings/email" component={ChangeEmail} />
               <Route exact path="/settings/password" component={ChangePass} />
               <Route exact path="/settings/phone" component={ChangePhone} />
               <Route exact path="/login/recovery" component={ForgotPass} />
-              <Route exact path="/logout" />
+              <Route exact path="/logout" component={Logout} />
             </Switch>
           </div>
         </Router>

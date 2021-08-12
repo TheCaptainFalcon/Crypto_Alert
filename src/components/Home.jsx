@@ -6,7 +6,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user : null
+            // isLoggedIn : false
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.info = this.info.bind(this)
@@ -30,27 +30,37 @@ class Home extends Component {
     info() {
         const user = firebase.auth().currentUser;
         console.log(user)
+        // console.log(user.uid)
     }
 
     // componentDidMount() {
     //     firebase.auth().onAuthStateChanged((user) => {
     //         if(user) {
-    //             this.setState({ user });
+    //             this.setState({
+    //                 isLoggedIn : true
+    //             });   
+    //         } else {
+    //             this.setState({
+    //                 isLoggedIn : false
+    //             })
+                
     //         }
-    //     });
+    //     })
     // }
 
     render() {
+        // const isLoggedIn = this.state.isLoggedIn;
 
-        const user = firebase.auth().currentUser;
+        let user = firebase.auth().currentUser;
 
         if (!user) {
             return (
                 <div>
                     hello guest - you must isgn
+                    <Button onClick={this.info}>Info</Button>
                 </div>
             )
-        } else {
+        } else if (user) {
             return (
                 <div>
                     hello user 

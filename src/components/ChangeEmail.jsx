@@ -17,6 +17,7 @@ class ChangeEmail extends Component {
         // where to enter functions to bind
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleGoBack = this.handleGoBack.bind(this);
     };
 
     handleChange(e) {
@@ -37,6 +38,11 @@ class ChangeEmail extends Component {
                 console.log('error has occurred', err)
             })
     };
+
+    handleGoBack(e) {
+        e.preventDefault();
+        this.props.history.push('/settings');
+    }
 
     render() { 
         const {
@@ -73,6 +79,7 @@ class ChangeEmail extends Component {
                         />
                     </FormControl>
                 </div>
+                <Button onClick={this.handleGoBack}>Go Back</Button>
                 <Button type="submit" disabled={isInvalid}>Save</Button>
             </form>
         );

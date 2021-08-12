@@ -18,6 +18,7 @@ class ChangePhone extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleGoBack = this.handleGoBack.bind(this);
     }
 
     handleChange(e) {
@@ -63,6 +64,11 @@ class ChangePhone extends Component {
             console.log('error', err)
         })
     }
+
+    handleGoBack(e) {
+        e.preventDefault();
+        this.props.history.push('/settings');
+    };
 
         // const { phoneNumber } = this.state;
         // const user = firebase.auth().currentUser;
@@ -117,6 +123,7 @@ class ChangePhone extends Component {
                         />
                     </FormControl>
                 </div>
+                <Button onClick={this.handleGoBack}>Go Back</Button>
                 <Button id="save-user-button" type='submit' disabled={isInvalid}>Save</Button>
             </form>
         );

@@ -5,25 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import Nav from './components/Nav';
-import firebase from 'firebase/app';
-import 'firebase/analytics';
-import 'firebase/auth';
-import 'firebase/database';
-import { fbKey } from './config/firebaseKeys';
-
-const firebaseConfig = {
-  apiKey: fbKey.API_KEY,
-  authDomain: fbKey.PROJECT_ID + '.firebaseapp.com',
-  databaseURL: "https://" + fbKey.PROJECT_ID + '.firebaseio.com',
-  projectId: fbKey.PROJECT_ID,
-  storageBucket: fbKey.PROJECT_ID + '.appspot.com',
-  messagingSenderId: fbKey.SENDER_ID,
-  appId: fbKey.APP_ID,
-  measurementId: "G-" + fbKey.MEASUREMENT_ID,
-};
-
-// MUST BE PLACED BEFORE DOM RENDER - otherwise re-renders with auth state changes will result in errors
-firebase.initializeApp(firebaseConfig);
+import firebase from './utils/firebase';
 
 ReactDOM.render(
   <StrictMode>

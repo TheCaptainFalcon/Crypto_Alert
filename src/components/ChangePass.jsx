@@ -17,6 +17,7 @@ class ChangePass extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleGoBack = this.handleGoBack.bind(this);
     }
 
     handleChange(e) {
@@ -37,6 +38,11 @@ class ChangePass extends Component {
             .catch((err) => {
                 console.log('error has occurred', err)
             })
+    };
+
+    handleGoBack(e) {
+        e.preventDefault();
+        this.props.history.push('/settings');
     };
  
     render() { 
@@ -74,6 +80,7 @@ class ChangePass extends Component {
                         />
                     </FormControl>
                 </div>
+                <Button onClick={this.handleGoBack}>Go Back</Button>
                 <Button type="submit" disabled={isInvalid}>Save</Button>
             </form>
         );

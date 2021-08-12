@@ -27,8 +27,7 @@ class Login extends Component {
         })
     };
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleSubmit() {
         const { email, pass } = this.state;
         firebase.auth().signInWithEmailAndPassword(email, pass)
             .then((userCredential) => {
