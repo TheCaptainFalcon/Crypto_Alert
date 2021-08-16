@@ -47,3 +47,6 @@ yarn-error.log*
 
 # firebase
 firebaseKeys.js
+
+# mongo
+keys.js
