@@ -22,7 +22,7 @@ class Settings extends Component {
         this.passPressed = this.passPressed.bind(this);
         this.phonePressed = this.phonePressed.bind(this);
         this.deletePressed = this.deletePressed.bind(this);
-        this.deleteModal = this.deleteModal.bind(this);
+        // this.deleteModal = this.deleteModal.bind(this);
         
     };
 

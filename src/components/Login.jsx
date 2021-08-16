@@ -14,7 +14,8 @@ class Login extends Component {
         this.state = {
             email : '',
             pass : '',
-            forgotPass : ''
+            forgotPass : '',
+            user: null
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,12 +27,14 @@ class Login extends Component {
         })
     };
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleSubmit() {
         const { email, pass } = this.state;
         firebase.auth().signInWithEmailAndPassword(email, pass)
             .then((userCredential) => {
                 const user = userCredential.user;
+                // this.setState({
+                //     user : userCredential.user
+                // })
                 // test dev
                 console.log('logged in!', user);
             }) 

@@ -31,11 +31,9 @@ class PreselectAlert extends Component {
                     // value={this.state.exchange} 
                     // onChange={this.handleChange} 
                     placeholder="Select an Exchange">
-                        <option value="Binance">Binance</option>
+                        <option value="Crypto.com">Binance</option>
                         <option value="Binance.us">Binance.us</option>
-                        <option value="Coinbase">Coinbase</option>
-                        <option value="Kraken">Kraken</option>
-                        <option value="Gemini">Gemini</option>
+                        <option value="Kucoin">Coinbase</option>
                         {/* for now... */}
                 </Select>
 
@@ -43,11 +41,9 @@ class PreselectAlert extends Component {
                     <option value="BTC">Bitcoin (BTC)</option>
                     <option value="ETH">Ethereum (ETH)</option>
                     <option value="ADA">Cardano (ADA)</option>
-                    <option value="ENJ">Enjin (ENJ)</option>
-                    <option value="XRP">Ripple (XRP)</option>
-                    <option value="XLM">Stellar-Lumens (XLM)</option>
-                    <option value="LTC">Litecoin (LTC)</option>
                     <option value="DOGE">Dogecoin (DOGE)</option>
+                    {/* if kucoin show kcs */}
+                    <option value="KCS">Kucoin Token (KCS)</option>
                 </Select>
                 {/* conditional to show options when picking exchange vs coin */}
                 {/* conditional - set state to disabled and then enable when an option is selected to open other select */}
