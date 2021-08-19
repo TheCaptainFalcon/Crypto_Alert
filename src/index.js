@@ -6,11 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import Nav from './components/Nav';
 import firebase from './utils/firebase';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 ReactDOM.render(
   <StrictMode>
+    <Provider store={ store }>
     <ColorModeScript />
     <App />
+    </Provider>
   </StrictMode>,
   document.getElementById('root')
 );

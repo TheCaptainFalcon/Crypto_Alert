@@ -50,4 +50,6 @@ app.use(function(err, req, res, next) {
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+app.use(passport.initialize());
+
 module.exports = app;
