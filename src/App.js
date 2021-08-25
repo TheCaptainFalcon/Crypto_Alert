@@ -30,9 +30,31 @@ import ForgotPass from './components/ForgotPass';
 import firebase from 'firebase';
 import MyAlerts from './components/MyAlerts';
 import Logout from './components/Logout';
+import jwt_decode from 'jwt-decode';
+import setAuthToken from './utils/setAuthToken';
+import store from './store/store';
+import { connect } from 'react-redux';
+import { logoutUser, setCurrentUser } from './actions/authActions';
+
+if (localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+
+  const decoded = jwt_decode(localStorage.jwtToken);
+  const currentTime = Date.now()/1000;
+
+  store.dispatch(setCurrentUser(decoded));
+  
+  if (decoded.exp < currentTime) {
+    store.dispatch(logoutUser());
+    // still need to decide on route
+    // window.location.href = '/users/login'
+    // window.location.href = '/login'
+
+  }
+}
 
 function App() { 
-  const user = firebase.auth().currentUser;
+  const user = firebase.auth().currentUser
 
   if(user === null) {
     return (
@@ -145,4 +167,8 @@ function App() {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  auth : state.auth
+});
+
+export default connect(mapStateToProps, { logoutUser }) (App);

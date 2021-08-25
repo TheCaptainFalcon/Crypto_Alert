@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
+import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { registerUser } from '../actions/authActions';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import {
     FormControl,
     FormLabel,
@@ -7,16 +13,18 @@ import {
     Button
 } from '@chakra-ui/react';
 import './css/Signup.css';
-import firebase from 'firebase';
+
+
 
 class Signup extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
+            username : '', 
             email : '',
             pass : '',
             confirmPass: '',
-            error : false
+            errors : {}
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -49,15 +57,37 @@ class Signup extends Component {
             })
     };
 
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push('/alerts');
+            // or my alerts route
+        };
+    };
+
+    componentDidUpdate(prevProps) {
+        // use if componentdidmount doesnt comply --
+        // if (prevProps.auth.isAuthenticated !== this.props.auth.isAuthenticated) {
+        //     this.props.history.push('')
+        // }
+
+        if (prevProps.errors !== this.props.errors) {
+            this.setState({
+                errors : this.props.errors
+            });
+        };
+    };
+
     render() {
 
         const {
+            user,
             email,
             pass,
             confirmPass,
             error
         } = this.state;
 
+        // could import from validation instead of defining here
         // simple error validation 
         const isInvalid =
             pass !== confirmPass ||
@@ -110,4 +140,15 @@ class Signup extends Component {
     }
 }
 
-export default Signup;
+Signup.propTypes = {
+    registerUser : PropTypes.func.isRequired,
+    auth : PropTypes.object.isRequired,
+    errors : PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth : state.auth,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Signup));
