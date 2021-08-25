@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../actions/authActions';
+import classnames from 'classnames';
 import {
     FormControl,
     FormLabel,
@@ -14,12 +18,32 @@ class Login extends Component {
         this.state = {
             email : '',
             pass : '',
-            forgotPass : '',
-            user: null
+            // forgotPass : '',
+            errors: {}
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push('/alerts');
+            // again - change to my alerts if needed
+        }
+    };
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.auth.isAuthenticated !== this.props.auth.isAuthenticated) {
+            this.props.history.push('/alerts')
+            // see above comment
+        };
+
+        if (prevProps.errors !== this.props.errors) {
+            this.setState({
+                errors : this.props.errors
+            });
+        };
+    };
 
     handleChange(e) {
         this.setState({
@@ -47,7 +71,8 @@ class Login extends Component {
         const {
             email,
             pass,
-            forgotPass
+            // forgotPass
+            errors
         } = this.state;
 
         const isInvalid = 
@@ -88,4 +113,15 @@ class Login extends Component {
     }
 }
 
-export default Login;
+Login.PropTypes = {
+    loginUser : PropTypes.func.isRequired,
+    auth : PropTypes.object.isRequired,
+    errors : PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth : state.auth,
+    errors : state.errors
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);
