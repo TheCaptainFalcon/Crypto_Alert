@@ -32,7 +32,7 @@ import MyAlerts from './components/MyAlerts';
 import Logout from './components/Logout';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
-import store from './store/store';
+import store from './store';
 import { connect } from 'react-redux';
 import { logoutUser, setCurrentUser } from './actions/authActions';
 

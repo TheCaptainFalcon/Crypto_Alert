@@ -1,20 +1,48 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { registerUser } from '../actions/authActions';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import {
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
-    Button
-} from '@chakra-ui/react';
+import { Form, Card, Button } from 'react-bootstrap';
+import styled from 'styled-components';
 import './css/Signup.css';
 
+const FormWrapper = styled.section`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: centerl
+    margin: 2rem;
+    padding 1rem;
+`;
 
+const Wrapper = styled.section`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+`;
+
+const MainLabel = styled.label`
+    display: flex;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    margin-top: 1rem;
+`;
+
+const ButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    justify-content: space-evenly;
+    margin: 0.5rem auto 1rem auto;
+`;
+
+const CardTitle = styled.h1`
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    margin: 1rem 2rem 0.25rem 2rem;
+`;
 
 class Signup extends Component {
     constructor(props) {
@@ -42,19 +70,14 @@ class Signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { email, pass } = this.state;
-        const user = firebase.auth().currentUser
-
-        firebase.auth().createUserWithEmailAndPassword(email, pass)
-            .then(() => {
-                // test dev
-                console.log('success', user);
-            })
-            .catch((error) => {
-                console.log('error has occurred', error)
-                // const errorCode = error.code;
-                // const errorMessage =  error.message;
-            })
+        const { name, email, pass, confirmPass } = this.state;
+        const newUser = {
+            name : name,
+            email : email,
+            pass : pass,
+            confirmPass : confirmPass
+        }
+        this.props.registerUser(newUser, this.props.history);
     };
 
     componentDidMount() {
@@ -80,11 +103,11 @@ class Signup extends Component {
     render() {
 
         const {
-            user,
+            // user,
             email,
             pass,
             confirmPass,
-            error
+            errors
         } = this.state;
 
         // could import from validation instead of defining here
@@ -95,47 +118,62 @@ class Signup extends Component {
             email === '';
 
         return (
-            <form className="container" onSubmit={this.handleSubmit}>
-                <h1 className="title">Sign Up</h1>
-                <div className="form">
-                    <FormControl id="email" isRequired>
-                        <FormLabel>Enter your email address</FormLabel>
-                        <Input 
-                            name="email"
-                            value= {email}
-                            type="email" 
-                            placeholder="Enter your email address" 
-                            onChange={this.handleChange}
-                        />
-                    </FormControl>
-                </div>
-                <div className="form">
-                    <FormControl id="pass" isRequired>
-                        <FormLabel>Enter your password</FormLabel>
-                        <Input 
-                            name="pass"
-                            value={pass}
-                            type="password" 
-                            placeholder="Enter your password" 
-                            onChange={this.handleChange}
-                        />
-                    </FormControl>
-                </div>
-                <div className="form">
-                    <FormControl id="confirmPass" isRequired>
-                        <FormLabel>Confirm your password</FormLabel>
-                        <Input 
-                            name="confirmPass"
-                            value={confirmPass}
-                            type="password" 
-                            placeholder="Confirm your password" 
-                            onChange={this.handleChange}
-                        />
-                    </FormControl>
-                </div>
-                {/* TOS textarea with checkbox - is required */}
-                <Button type="submit" disabled={isInvalid}>Submit</Button>
-            </form>
+            <Wrapper>
+                <FormWrapper>
+                    <Card className="card">
+                        <CardTitle>Sign Up</CardTitle>
+                        <Form className="form" onSubmit={this.handleSubmit}>
+                            <Form.Group>
+                                <MainLabel>Email </MainLabel>
+                                <Form.Control 
+                                    id="email" 
+                                    name="email"
+                                    className={classnames({ 'is-invalid' : errors.email })}
+                                    value= {email}
+                                    type="email" 
+                                    placeholder="Enter your email address" 
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                                {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}  
+                            </Form.Group>
+                            <Form.Group>
+                                <MainLabel>Password </MainLabel>
+                                <Form.Control
+                                    id="pass"
+                                    name="pass"
+                                    className={classnames({ 'is-invalid' : errors.pass })}
+                                    value={pass}
+                                    type="password" 
+                                    placeholder="Enter your password" 
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                                {errors.pass && (<div className="invalid-feedback">{errors.pass}</div>)}
+                            </Form.Group>
+                            <Form.Group>
+                                <MainLabel>Confirm Password </MainLabel>
+                                <Form.Control
+                                    id="confirmPass"
+                                    name="confirmPass"
+                                    className={classnames({ 'is-invalid' : errors.confirmPass})}
+                                    value={confirmPass}
+                                    type="password" 
+                                    placeholder="Confirm your password" 
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                                {errors.confirmPass && (<div className="invalid-feedback">{errors.confirmPass}</div>)}
+                            </Form.Group>
+                            <ButtonWrapper>
+                                {/* TOS textarea with checkbox - is required */}
+                                <Button variant="primary" type="submit" disabled={isInvalid}>Submit</Button>
+                            </ButtonWrapper>
+         
+                        </Form>
+                    </Card>
+                </FormWrapper>
+            </Wrapper>
         )
     }
 }

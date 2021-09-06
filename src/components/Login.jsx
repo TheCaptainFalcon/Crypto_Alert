@@ -3,14 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authActions';
 import classnames from 'classnames';
-import {
-    FormControl,
-    FormLabel,
-    Input,
-    Button
-} from '@chakra-ui/react';
+import { Form, Control, Card, Button } from 'react-bootstrap';
 import './css/Login.css';
-import firebase from 'firebase';
 
 class Login extends Component {
     constructor(props) {
@@ -18,7 +12,6 @@ class Login extends Component {
         this.state = {
             email : '',
             pass : '',
-            // forgotPass : '',
             errors: {}
         }
         this.handleChange = this.handleChange.bind(this);
@@ -51,27 +44,22 @@ class Login extends Component {
         })
     };
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
         const { email, pass } = this.state;
-        firebase.auth().signInWithEmailAndPassword(email, pass)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                // this.setState({
-                //     user : userCredential.user
-                // })
-                // test dev
-                console.log('logged in!', user);
-            }) 
-            .catch((error) => {
-                console.log('error', error)
-            })
+        const userCredentials = {
+            email : email,
+            pass : pass
+        };
+
+        this.props.loginUser(userCredentials);
     };
+        
 
     render() {
         const {
             email,
             pass,
-            // forgotPass
             errors
         } = this.state;
 
@@ -83,26 +71,29 @@ class Login extends Component {
             <form className="container" onSubmit={this.handleSubmit}>
                 <h1 className="title">Login</h1>
                 <div className="form">
-                    <FormControl id="email" isRequired>
-                        <FormLabel>Enter your email address</FormLabel>
-                        <Input 
+                    <Form.Control id="email" isRequired>
+                        <Form.Label>Enter your email address</Form.Label>
+                      
                             name="email"
+                            className={classnames({ "is-invalid" : errors.email })}
                             type="email" 
                             placeholder="Enter your email address" 
                             onChange={this.handleChange}
-                        />
-                    </FormControl>
+                    
+                        {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+                    </Form.Control>
                 </div>
                 <div className="form">
-                    <FormControl id="pass" isRequired>
-                        <FormLabel>Enter your password</FormLabel>
-                        <Input 
+                    <Form.Control id="pass" isRequired>
+                        <Form.Label>Enter your password</Form.Label>
+             
                             name="pass"
                             type="password" 
                             placeholder="Enter your password" 
                             onChange={this.handleChange}
-                        />
-                    </FormControl>
+                  
+                        {errors.pass && (<div className="invalid-feedback">{errors.pass}</div>)}
+                    </Form.Control>
                 </div>
                 <div>
                     <a className="forgotPass" href="/login/recovery">Forgot Password?</a>
@@ -113,7 +104,7 @@ class Login extends Component {
     }
 }
 
-Login.PropTypes = {
+Login.propTypes = {
     loginUser : PropTypes.func.isRequired,
     auth : PropTypes.object.isRequired,
     errors : PropTypes.object.isRequired

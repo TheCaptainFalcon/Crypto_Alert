@@ -3,3 +3,13 @@
     font-weight: bolder;
     font-size: larger;
 }
+
+.card {
+    margin: 4rem;
+    border: 1px solid black;
+}
+
+.form {
+    margin: 2rem;
+}
+

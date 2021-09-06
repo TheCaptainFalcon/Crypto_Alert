@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import Nav from './components/Nav';
 import firebase from './utils/firebase';
 import { Provider } from 'react-redux';
-import store from './store/store';
+import store from './store';
 
 ReactDOM.render(
   <StrictMode>
