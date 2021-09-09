@@ -4,22 +4,22 @@ const isEmpty = require('./isEmpty');
 module.exports = function validateRegisterInput(data) {
     let errors = {};
 
-    data.username = !isEmpty(data.username) ? data.username : '';
+    // data.username = !isEmpty(data.username) ? data.username : '';
     data.password = !isEmpty(data.password) ? data.password : '';
     data.email = !isEmpty(data.email) ? data.email : '';
     // may or may not be required; can be used in different input
-    data.phone = !isEmpty(data.phone) ? data.phone : '';
-    data.confirmPassword = !isEmpty(data.confirmPassword) ? data.confirmPassword : '';
+    // data.phone = !isEmpty(data.phone) ? data.phone : '';
+    data.password2 = !isEmpty(data.password2) ? data.password2 : '';
 
     // Username errors
 
-    if (!Validator.isLength(data.username, { min: 6, max: 15 })) {
-        errors.username = "Username must be between 6 and 15 characters."
-    };
+    // if (!Validator.isLength(data.username, { min: 6, max: 15 })) {
+    //     errors.username = "Username must be between 6 and 15 characters."
+    // };
 
-    if(Validator.isEmpty(data.username)) {
-        errors.username = "Username field is required."
-    };
+    // if(Validator.isEmpty(data.username)) {
+    //     errors.username = "Username field is required."
+    // };
 
     // Password errors
 
@@ -33,8 +33,8 @@ module.exports = function validateRegisterInput(data) {
 
     // Confirm Password error
 
-    if (!Validator.equals(data.password, data.confirmPassword)) {
-        errors.confirmPassword = "Passwords must match."
+    if (!Validator.equals(data.password, data.password2)) {
+        errors.password2 = "Passwords must match."
     };
 
     // Email errors
@@ -49,13 +49,13 @@ module.exports = function validateRegisterInput(data) {
 
     // Phone errors
 
-    if (Validator.isEmpty(data.phone)) {
-        errors.phone = "Phone number field is required."
-    };
+    // if (Validator.isEmpty(data.phone)) {
+    //     errors.phone = "Phone number field is required."
+    // };
 
-    if (!Validator.isMobilePhone(data.phone)) {
-        errors.phone= "Phone number is invalid."
-    };
+    // if (!Validator.isMobilePhone(data.phone)) {
+    //     errors.phone= "Phone number is invalid."
+    // };
 
     return {
         errors : errors,

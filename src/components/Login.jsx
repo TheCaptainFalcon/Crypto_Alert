@@ -4,14 +4,51 @@ import { connect } from 'react-redux';
 import { loginUser } from '../actions/authActions';
 import classnames from 'classnames';
 import { Form, Control, Card, Button } from 'react-bootstrap';
+import styled from 'styled-components';
 import './css/Login.css';
+
+const FormWrapper = styled.section`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: centerl
+    margin: 2rem;
+    padding 1rem;
+`;
+
+const Wrapper = styled.section`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+`;
+
+const MainLabel = styled.label`
+    display: flex;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    margin-top: 1rem;
+`;
+
+const ButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    justify-content: space-evenly;
+    margin: 0.5rem auto 1rem auto;
+`;
+
+const CardTitle = styled.h1`
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    margin: 1rem 2rem 0.25rem 2rem;
+`;
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email : '',
-            pass : '',
+            password : '',
             errors: {}
         }
         this.handleChange = this.handleChange.bind(this);
@@ -20,16 +57,16 @@ class Login extends Component {
 
     componentDidMount() {
         if (this.props.auth.isAuthenticated) {
-            this.props.history.push('/alerts');
+            this.props.history.push('/track/alerts');
             // again - change to my alerts if needed
         }
     };
 
     componentDidUpdate(prevProps) {
-        if (prevProps.auth.isAuthenticated !== this.props.auth.isAuthenticated) {
-            this.props.history.push('/alerts')
-            // see above comment
-        };
+        // if (prevProps.auth.isAuthenticated !== this.props.auth.isAuthenticated) {
+        //     this.props.history.push('/track/alerts')
+        //     // see above comment
+        // };
 
         if (prevProps.errors !== this.props.errors) {
             this.setState({
@@ -46,10 +83,10 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { email, pass } = this.state;
+        const { email, password } = this.state;
         const userCredentials = {
             email : email,
-            pass : pass
+            password : password
         };
 
         this.props.loginUser(userCredentials);
@@ -59,47 +96,57 @@ class Login extends Component {
     render() {
         const {
             email,
-            pass,
+            password,
             errors
         } = this.state;
 
         const isInvalid = 
             email === '' ||
-            pass === '';
+            password === '';
 
         return (
-            <form className="container" onSubmit={this.handleSubmit}>
-                <h1 className="title">Login</h1>
-                <div className="form">
-                    <Form.Control id="email" isRequired>
-                        <Form.Label>Enter your email address</Form.Label>
-                      
-                            name="email"
-                            className={classnames({ "is-invalid" : errors.email })}
-                            type="email" 
-                            placeholder="Enter your email address" 
-                            onChange={this.handleChange}
-                    
-                        {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                    </Form.Control>
-                </div>
-                <div className="form">
-                    <Form.Control id="pass" isRequired>
-                        <Form.Label>Enter your password</Form.Label>
+            <Wrapper>
+                <FormWrapper>
+                    <Card className="card">
+                        <CardTitle>Login</CardTitle>
+                        <Form className="form" onSubmit={this.handleSubmit}>
+                            <Form.Group>
+                                <MainLabel>Email</MainLabel>
+                            
+                            <Form.Control
+                                name="email"
+                                className={classnames({ "is-invalid" : errors.email })}
+                                type="email"
+                                placeholder="Enter your email address."
+                                value={email}
+                                onChange={this.handleChange}
+                            />
+                            {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+                            </Form.Group>
+                            <Form.Group>
+                                <MainLabel>Password</MainLabel>
+                                <Form.Control
+                                    name="password"
+                                    className={classnames({ "is-invalid" : errors.password })}
+                                    type="password"
+                                    placeholder="Enter your password."
+                                    value={password}
+                                    onChange={this.handleChange}
+                                />
+                                {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+                            </Form.Group>
+                            <ButtonWrapper>
+                                <Button variant="primary" type="submit" disabled={isInvalid}>Submit</Button>
+                            </ButtonWrapper>
+                        </Form>
+                    </Card>
+                </FormWrapper>
+            </Wrapper>
+
+            /* <div>
+                <a className="forgotPass" href="/login/recovery">Forgot Password?</a>
+            </div> */
              
-                            name="pass"
-                            type="password" 
-                            placeholder="Enter your password" 
-                            onChange={this.handleChange}
-                  
-                        {errors.pass && (<div className="invalid-feedback">{errors.pass}</div>)}
-                    </Form.Control>
-                </div>
-                <div>
-                    <a className="forgotPass" href="/login/recovery">Forgot Password?</a>
-                </div>
-                <Button type="submit" disabled={isInvalid}>Submit</Button>
-            </form>
         )
     }
 }

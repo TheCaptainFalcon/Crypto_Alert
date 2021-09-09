@@ -2,10 +2,10 @@ const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true
-    },
+    // username: {
+    //     type: String,
+    //     required: true
+    // },
 
     password: {
         type: String,
@@ -17,10 +17,10 @@ const userSchema = new Schema({
         required: true
     },
 
-    phone: {
-        type: Number,
-        required: false
-    },
+    // phone: {
+    //     type: Number,
+    //     required: false
+    // },
 
     date: {
         type: Date,

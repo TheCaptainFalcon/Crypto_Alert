@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Form, Card, Button } from 'react-bootstrap';
 import styled from 'styled-components';
-import './css/Signup.css';
+import './css/Register.css';
 
 const FormWrapper = styled.section`
     display: flex;
@@ -44,14 +44,14 @@ const CardTitle = styled.h1`
     margin: 1rem 2rem 0.25rem 2rem;
 `;
 
-class Signup extends Component {
+class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
             username : '', 
             email : '',
-            pass : '',
-            confirmPass: '',
+            password : '',
+            password2: '',
             errors : {}
         }
 
@@ -70,27 +70,34 @@ class Signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { name, email, pass, confirmPass } = this.state;
+        const { name, email, password, password2 } = this.state;
         const newUser = {
             name : name,
             email : email,
-            pass : pass,
-            confirmPass : confirmPass
+            password : password,
+            password2 : password2
         }
         this.props.registerUser(newUser, this.props.history);
     };
 
     componentDidMount() {
         if (this.props.auth.isAuthenticated) {
-            this.props.history.push('/alerts');
+            this.props.history.push('/track/alerts');
             // or my alerts route
         };
     };
 
+    // componentWillReceiveProps(nextProps) {
+    //     if(nextProps.errors) {
+    //         this.setState({ errors: nextProps.errors })
+    //     }
+    // }
+
+    // ADD WHEN WORKING
     componentDidUpdate(prevProps) {
         // use if componentdidmount doesnt comply --
         // if (prevProps.auth.isAuthenticated !== this.props.auth.isAuthenticated) {
-        //     this.props.history.push('')
+        //     this.props.history.push('/track/alerts')
         // }
 
         if (prevProps.errors !== this.props.errors) {
@@ -105,16 +112,16 @@ class Signup extends Component {
         const {
             // user,
             email,
-            pass,
-            confirmPass,
+            password,
+            password2,
             errors
         } = this.state;
 
         // could import from validation instead of defining here
         // simple error validation 
         const isInvalid =
-            pass !== confirmPass ||
-            pass === '' ||
+            password !== password2 ||
+            password === '' ||
             email === '';
 
         return (
@@ -140,30 +147,30 @@ class Signup extends Component {
                             <Form.Group>
                                 <MainLabel>Password </MainLabel>
                                 <Form.Control
-                                    id="pass"
-                                    name="pass"
-                                    className={classnames({ 'is-invalid' : errors.pass })}
-                                    value={pass}
+                                    id="password"
+                                    name="password"
+                                    className={classnames({ 'is-invalid' : errors.password })}
+                                    value={password}
                                     type="password" 
                                     placeholder="Enter your password" 
                                     onChange={this.handleChange}
                                     required
                                 />
-                                {errors.pass && (<div className="invalid-feedback">{errors.pass}</div>)}
+                                {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                             </Form.Group>
                             <Form.Group>
                                 <MainLabel>Confirm Password </MainLabel>
                                 <Form.Control
-                                    id="confirmPass"
-                                    name="confirmPass"
-                                    className={classnames({ 'is-invalid' : errors.confirmPass})}
-                                    value={confirmPass}
+                                    id="password2"
+                                    name="password2"
+                                    className={classnames({ 'is-invalid' : errors.password2})}
+                                    value={password2}
                                     type="password" 
                                     placeholder="Confirm your password" 
                                     onChange={this.handleChange}
                                     required
                                 />
-                                {errors.confirmPass && (<div className="invalid-feedback">{errors.confirmPass}</div>)}
+                                {errors.password2 && (<div className="invalid-feedback">{errors.password2}</div>)}
                             </Form.Group>
                             <ButtonWrapper>
                                 {/* TOS textarea with checkbox - is required */}
@@ -178,7 +185,7 @@ class Signup extends Component {
     }
 }
 
-Signup.propTypes = {
+Register.propTypes = {
     registerUser : PropTypes.func.isRequired,
     auth : PropTypes.object.isRequired,
     errors : PropTypes.object.isRequired
@@ -189,4 +196,4 @@ const mapStateToProps = state => ({
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { registerUser })(withRouter(Signup));
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));

@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 // POST request for registration
-router.get('/register', function(req, res) {
+router.post('/register', function(req, res) {
 
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -23,7 +23,7 @@ router.get('/register', function(req, res) {
     return res.status(400).json(errors);
   };
 
-  const username = req.body.username;
+  // const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
 
@@ -34,7 +34,7 @@ router.get('/register', function(req, res) {
         return res.status(400).json(errors);
       } else {
         const newUser = new userModel({
-          username : username,
+          // username : username,
           email : email,
           password : password
         });
@@ -45,7 +45,7 @@ router.get('/register', function(req, res) {
             newUser.password = hash;
             newUser.save()
               .then(user => res.json(user))
-              .catach(err => console.log(err))
+              .catch(err => console.log(err))
           });
         });
       };
@@ -74,7 +74,8 @@ router.post('/login', function (req, res) {
       bcrypt.compare(password, user.password)
         .then(isMatch => {
           if (isMatch) {
-            const payload = { id : user.id, username : user.username };
+            // const payload = { id : user.id, username : user.username };
+            const payload = { id : user.id };
             // 30 days duration
             jwt.sign(payload, keys.secret, { expiresIn : 86400 }), (err, token) => {
               res.json ({ 
@@ -94,12 +95,12 @@ router.post('/login', function (req, res) {
 router.get('/current', passport.authenticate('jwt', { session : false}), (req, res) => {
 
   const id = req.body.id;
-  const username = req.body.username;
+  // const username = req.body.username;
   const email = req.body.email;
 
   res.json({
     id : id,
-    username : username,
+    // username : username,
     email : email
   });
 });

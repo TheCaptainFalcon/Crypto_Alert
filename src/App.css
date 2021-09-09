@@ -10,3 +10,12 @@
 .profileHeader {
     background-color: beige;
 }
+
+.App-nav-link {
+    margin: auto 0.5rem;
+}
+
+.App-nav {
+    display: flex;
+    justify-content: space-between;
+}

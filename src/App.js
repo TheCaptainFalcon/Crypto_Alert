@@ -1,37 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Home from './components/Home';
 import { BrowserRouter as Router, Route, Switch, NavLink } from 'react-router-dom';
-import Signup from './components/Signup';
-import Login from './components/Login';
 import './App.css';
-import {
-  Container,
-  Box,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuIcon,
-  MenuCommand,
-  MenuDivider,
-} from "@chakra-ui/react";
+import Register from './components/Register';
+import Login from './components/Login';
 import Alerts from './components/Alerts';
 import Settings from './components/Settings';
-import { ChakraProvider } from '@chakra-ui/react'; 
-// This is needed for the CSS template to work/apply.
 import ChangeEmail from './components/ChangeEmail';
 import ChangePass from './components/ChangePass';
 import ChangePhone from './components/ChangePhone';
 import ForgotPass from './components/ForgotPass';
-import firebase from 'firebase';
+import { Navbar } from 'react-bootstrap';
 import MyAlerts from './components/MyAlerts';
 import Logout from './components/Logout';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
+import PropTypes from 'prop-types';
 import store from './store';
 import { connect } from 'react-redux';
 import { logoutUser, setCurrentUser } from './actions/authActions';
@@ -47,124 +31,65 @@ if (localStorage.jwtToken) {
   if (decoded.exp < currentTime) {
     store.dispatch(logoutUser());
     // still need to decide on route
-    // window.location.href = '/users/login'
+    window.location.href = '/users/login'
     // window.location.href = '/login'
 
   }
 }
 
-function App() { 
-  const user = firebase.auth().currentUser
+class App extends Component { 
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
 
-  if(user === null) {
+  render() {
+    const { isAuthenticated } = this.props.auth;
+    const authLinks = (
+      <Navbar className='App-nav' bg="dark" variant="dark">
+        <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/user/alerts'>My Alerts</NavLink>
+        <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/user/settings/'>Settings</NavLink>
+        <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/'>Logout</NavLink>
+      </Navbar>
+    );
+
+    const guestLinks = (
+      <Navbar className='App-nav' bg="dark" variant="dark">
+        <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/user/register'>Register</NavLink>
+        <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/user/login'>Login</NavLink>
+      </Navbar>
+    )
+    
     return (
-      <ChakraProvider>
-      <Router>
-        <div>
-          <ul className="menu">
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/signup">Sign Up</NavLink>
-            </li>
-            <li>
-               <NavLink to="/login">Login</NavLink>
-            </li>
-            <li>
-               <NavLink to="/alerts">Alerts</NavLink>
-            </li>
-            {/* <li>
-               <NavLink to="/settings">Account Settings</NavLink>
-            </li> */}
-          </ul>
-
-          <Switch>
+        <Router>   
+          <Navbar className='App-nav' bg="dark" variant="dark">
+            <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/'>Home</NavLink>
+            <NavLink className="App-nav-link" activeClassName='active-link' exact={true} to='/track/alerts'> Add Alerts</NavLink>
+            { isAuthenticated ? authLinks : guestLinks }
+          </Navbar>
+            <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/alerts" component={Alerts} />
-            <Route exact path="/settings" component={Settings} />
-            <Route exact path="/settings/alerts" component={MyAlerts} /> 
-            <Route exact path="/settings/email" component={ChangeEmail} />
-            <Route exact path="/settings/password" component={ChangePass} />
-            <Route exact path="/settings/phone" component={ChangePhone} />
+            <Route exact path="/user/register" component={Register} />
+            <Route exact path="/user/login" component={Login} />
+            <Route exact path="/track/alerts" component={Alerts} />
+            <Route exact path="/user/settings" component={Settings} />
+            <Route exact path="/user/alerts" component={MyAlerts} />
+            <Route exact path="/user/settings/email" component={ChangeEmail} />
+            <Route exact path="/user/settings/password" component={ChangePass} />
+            <Route exact path="/user/settings/phone" component={ChangePhone} />
             <Route exact path="/login/recovery" component={ForgotPass} />
             <Route exact path="/logout" component={Logout} />
           </Switch>
-        </div>
-      </Router>
-      </ChakraProvider>
-    )
-  } else {
-    return (
-      <ChakraProvider>
-        <Router>
-          <div>
-            <ul className="menu">
-              <li>
-                <Menu>
-                  <NavLink to="/">
-                    <MenuButton as={Button} colorScheme="pink">Home</MenuButton>
-                  </NavLink>
-                </Menu>
-              </li>
-              {/* <li>
-                <NavLink to="/signup">Sign Up</NavLink>
-              </li> */}
-              <li>
-                <Menu>
-                  <NavLink to="/alerts">
-                    <MenuButton as={Button} colorScheme="pink">Setup Alerts</MenuButton>
-                  </NavLink>
-                </Menu>
-              </li>
-              {/* <li>
-                <NavLink to="/settings">Account Settings</NavLink>
-              </li> */}
-              <li>
-              <Menu>
-                <MenuButton className="profileButton" as={Button} colorScheme="pink">Profile</MenuButton>
-                <MenuList>
-                    <MenuGroup className="profileHeader" title="Profile">
-                      <NavLink to="/settings/alerts">
-                        <MenuItem>My Alerts</MenuItem>
-                      </NavLink>
-                      <NavLink to="/settings">
-                        <MenuItem>Account Settings</MenuItem>
-                      </NavLink>
-                      <NavLink to="/logout">
-                        <MenuItem>Sign Out</MenuItem>
-                      </NavLink>
-                    </MenuGroup>
-                    <MenuDivider />
-                    <MenuGroup className="profileHeader" title="Help">
-                        <MenuItem>Docs</MenuItem>
-                        <MenuItem>FAQ</MenuItem>
-                    </MenuGroup>
-                </MenuList>
-            </Menu>
-            </li>
-              </ul>
-              <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/alerts" component={Alerts} />
-              <Route exact path="/settings" component={Settings} />
-              <Route exact path="/settings/alerts" component={MyAlerts} />
-              <Route exact path="/settings/email" component={ChangeEmail} />
-              <Route exact path="/settings/password" component={ChangePass} />
-              <Route exact path="/settings/phone" component={ChangePhone} />
-              <Route exact path="/login/recovery" component={ForgotPass} />
-              <Route exact path="/logout" component={Logout} />
-            </Switch>
-          </div>
+      
         </Router>
-      </ChakraProvider>
 
     )
   }
+}
+
+App.propTypes = {
+  logoutUser : PropTypes.func.isRequired,
+  auth : PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
